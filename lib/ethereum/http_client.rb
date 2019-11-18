@@ -11,27 +11,14 @@ module Ethereum
       @host = uri.host
       @port = uri.port
       @proxy = proxy
-      
+
       @ssl = uri.scheme == 'https'
       @uri = URI("#{uri.scheme}://#{@host}:#{@port}#{uri.path}")
     end
 
     def send_single(payload)
-      if @proxy.present?
-        _, p_username, p_password, p_host, p_port = @proxy.gsub(/(:|\/|@)/,' ').squeeze(' ').split
-        http = ::Net::HTTP.new(@host, @port, p_host, p_port, p_username, p_password)
-      else
-        http = ::Net::HTTP.new(@host, @port)
-      end
-
-      if @ssl
-        http.use_ssl = true
-      end
-      header = {'Content-Type' => 'application/json'}
-      request = ::Net::HTTP::Post.new(uri, header)
-      request.body = payload
-      response = http.request(request)
-      response.body
+      client = RestClient::Resource.new(uri.to_s)
+      JSON.parse client.post(payload, accept: 'json', content_type: 'json' )
     end
 
     def send_batch(batch)
