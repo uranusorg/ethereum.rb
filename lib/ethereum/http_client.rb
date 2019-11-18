@@ -18,7 +18,7 @@ module Ethereum
 
     def send_single(payload)
       client = RestClient::Resource.new(uri.to_s)
-      JSON.parse client.post(payload, accept: 'json', content_type: 'json' )
+      client.post(payload, accept: 'json', content_type: 'json' )
     end
 
     def send_batch(batch)
