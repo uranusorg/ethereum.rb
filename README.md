@@ -4,9 +4,8 @@
 
 The goal of ethereum.rb is to make interacting with ethereum blockchain from ruby as fast and easy as possible (but not easier!).
 
-## Looking for new maintainer
-As we changed our technological stack away from ruby and we are not using ethereum.rb anymore. The gem suffered from neglect. We are looking for person/people who would like to take over developing and maintaining. Ideally, someone who uses it and who already worked with code quite a bit.
-If you are interested send an email to marek@ethworks.io.
+## Maintainer
+Project is currently maintained by [@kurotaky](https://github.com/kurotaky).
 
 ## Highlights
 
@@ -59,6 +58,8 @@ contract.call.greet # => "Hello from ethereum.rb!"
 ```
 
 You can see example contract [greeter here](https://github.com/marekkirejczyk/ruby_ethereum_example/blob/master/contracts/greeter.sol).
+
+> If contract method name uses camel case you must convert it to snake case when use call: `call.your_method`.
 
 ## Smart contracts
 
