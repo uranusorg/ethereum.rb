@@ -21,8 +21,6 @@ module Ethereum
       @sender = client.default_account
       @encoder = Encoder.new
       @decoder = Decoder.new
-      @gas_limit = @client.gas_limit
-      @gas_price = @client.gas_price
     end
 
     # Creates a contract wrapper.
@@ -115,10 +113,22 @@ module Ethereum
     end
 
     def send_transaction(tx_args)
-        @client.eth_send_transaction(tx_args)["result"]
+      @client.eth_send_transaction(tx_args)["result"]
     end
 
-    def send_raw_transaction(payload, to = nil)
+    def est_gas_limit(from, to, data)
+      args = { from: from, to: to, data: data }
+      @client.eth_estimate_gas(args)['result'].to_i(16)
+    end
+
+    def est_gas_price
+      @client.eth_gas_price['result'].to_i(16)
+    end
+
+    def send_raw_transaction(payload, to = nil, **options)
+      gas_limit ||= est_gas_limit(@client.default_account, to, payload)
+      gas_price ||= est_gas_price
+
       Eth.configure { |c| c.chain_id = @client.net_version["result"].to_i }
       @nonce = @client.get_nonce(key.address)
       args = {
